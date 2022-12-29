@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +15,10 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    //return inertia('app');
-    return Inertia::render('test');
-});
+    //return Inertia::render('test');
+    return inertia('test');
+})->name('home');
 
-Route::get('/test2', function () {
+Route::get('/contact', function () {
     return inertia('test2');
-});
+})->name('contact');
