@@ -22,23 +22,39 @@
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                     data-accordion="false">
 
-                    
                     <li class="nav-item">
-                        <Link :href="route('home')" class="nav-link">
+                        <Link :href="route('niveauscolaire.index')" class="nav-link" :class="{ 'active' : $page.component == 'NiveauScolaire/Index' }">
                             <i class="nav-icon fas fa-th"></i>
                             <p>
-                                Accueil  
+                                Niveau Scolaire 
                             </p>
                         </Link>
                     </li>
-                    <li class="nav-item">
-                        <Link :href="route('contact')" class="nav-link">
-                            <i class="nav-icon fas fa-th"></i>
-                            <p>
-                                Contact  
-                            </p>
+
+                    <li class="nav-item" :class="{ 'menu-open' : $page.component.startsWith('Etudiant/') }">
+                        <Link href="#" class="nav-link" :class="{ 'active' : $page.component.startsWith('Etudiant/') }">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            Etudiant
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
                         </Link>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <Link :href="route('etudiant.index')" class="nav-link" :class="{ 'active' : $page.component == 'Etudiant/Index' }"> 
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Tous</p>
+                                </Link>
+                            </li>
+                            <li class="nav-item">
+                                <Link :href="route('etudiant.create')" class="nav-link" :class="{ 'active' : $page.component == 'Etudiant/Create' }">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Nouveau</p>
+                                </Link>
+                            </li>
+                        </ul>
                     </li>
+
                 </ul>
             </nav>
 
