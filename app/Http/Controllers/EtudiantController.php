@@ -13,4 +13,8 @@ class EtudiantController extends Controller
     public function create() {
         return inertia("Etudiant/Create");
     }
+
+    public function edit() {
+        return inertia("Etudiant/Edit");
+    }
 }
