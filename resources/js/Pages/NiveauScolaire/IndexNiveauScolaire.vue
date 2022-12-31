@@ -16,7 +16,9 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"></h3>
+                            <div class="card-title">
+                                <CreateNiveauScolaire />
+                            </div>
                             <div class="card-tools">
                                 <PaginationVue 
                                     :links="props.niveauScolaires.links" 
@@ -35,7 +37,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="niveauScolaire in props.niveauScolaires.data">
+                                    <tr v-for="niveauScolaire in props.niveauScolaires.data" :key="niveauScolaire">
                                         <td>{{ niveauScolaire.nom }}</td>
                                         <td>
                                             <div class="d-flex justify-items-center">
@@ -58,6 +60,7 @@
 
 <script setup>
 import PaginationVue from '../../Shared/Pagination.vue';
+import CreateNiveauScolaire from './CreateNiveauScolaire.vue';
 
     //récup des données transmises par le fichier controller
     const props = defineProps({

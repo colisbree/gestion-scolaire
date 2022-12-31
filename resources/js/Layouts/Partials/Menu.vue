@@ -23,7 +23,7 @@
                     data-accordion="false">
 
                     <li class="nav-item">
-                        <Link :href="route('niveauscolaire.index')" class="nav-link" :class="{ 'active' : $page.component == 'NiveauScolaire/Index' }">
+                        <Link :href="route('niveauscolaire.index')" class="nav-link" :class="{ 'active' : $page.component == 'NiveauScolaire/IndexNiveauScolaire' }">
                             <i class="nav-icon fas fa-th"></i>
                             <p>
                                 Niveau Scolaire 
