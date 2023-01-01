@@ -21,7 +21,8 @@
                     <form v-on:submit.prevent="soumettre" id="createForm">
                         <div class="form-group">
                             <label for="">Nom</label>
-                            <input type="text" required class="form-control" v-model="nomNouveauNS">
+                            <input type="text" required class="form-control" :class="{'is-invalid': nomError != ''}" v-model="nomNouveauNS">
+                            <span v-if="nomError != '' " class="invalid-feedback error">{{ nomError }}</span>
                         </div>
                     </form>
                 </div>
@@ -38,11 +39,12 @@
 
     import { Inertia } from '@inertiajs/inertia'
     import { onMounted, ref } from 'vue'
-    import { useSwalSuccess, useSwalError } from '../../Composables/alert'
+    import { useSwalSuccess, useSwalError } from '@/composables/alert'
 
     //lier la variable au champ input (too with data byding)
     const nomNouveauNS = ref("")
     // fin
+    const nomError = ref("")
 
     let createModal = ""
     onMounted(()=>{
@@ -71,6 +73,9 @@
                 },
                 onError: (errors) => {
                     // afficher un message d'erreur
+                    if(errors.nom != null){
+                        nomError.value = errors.nom
+                    }
                     useSwalError("Une erreur s'est produite.")
                 }
         })

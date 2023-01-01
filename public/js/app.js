@@ -29753,7 +29753,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-/* harmony import */ var _Composables_alert__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Composables/alert */ "./resources/js/Composables/alert.js");
+/* harmony import */ var _composables_alert__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/composables/alert */ "./resources/js/composables/alert.js");
 
 
 
@@ -29767,7 +29767,7 @@ __webpack_require__.r(__webpack_exports__);
     expose();
     var nomNouveauNS = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)("");
     // fin
-
+    var nomError = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)("");
     var createModal = "";
     (0,vue__WEBPACK_IMPORTED_MODULE_1__.onMounted)(function () {
       createModal = $('#CreateNVModal');
@@ -29788,16 +29788,20 @@ __webpack_require__.r(__webpack_exports__);
           closeModal();
           // afficher un message de succès avec sweetAlert2
           // depuis le fichier resources/js/composables/alert.js
-          (0,_Composables_alert__WEBPACK_IMPORTED_MODULE_2__.useSwalSuccess)("Niveau scolaire ajouté avec succès !");
+          (0,_composables_alert__WEBPACK_IMPORTED_MODULE_2__.useSwalSuccess)("Niveau scolaire ajouté avec succès !");
         },
         onError: function onError(errors) {
           // afficher un message d'erreur
-          (0,_Composables_alert__WEBPACK_IMPORTED_MODULE_2__.useSwalError)("Une erreur s'est produite.");
+          if (errors.nom != null) {
+            nomError.value = errors.nom;
+          }
+          (0,_composables_alert__WEBPACK_IMPORTED_MODULE_2__.useSwalError)("Une erreur s'est produite.");
         }
       });
     };
     var __returned__ = {
       nomNouveauNS: nomNouveauNS,
+      nomError: nomError,
       get createModal() {
         return createModal;
       },
@@ -29812,10 +29816,10 @@ __webpack_require__.r(__webpack_exports__);
       onMounted: vue__WEBPACK_IMPORTED_MODULE_1__.onMounted,
       ref: vue__WEBPACK_IMPORTED_MODULE_1__.ref,
       get useSwalSuccess() {
-        return _Composables_alert__WEBPACK_IMPORTED_MODULE_2__.useSwalSuccess;
+        return _composables_alert__WEBPACK_IMPORTED_MODULE_2__.useSwalSuccess;
       },
       get useSwalError() {
-        return _Composables_alert__WEBPACK_IMPORTED_MODULE_2__.useSwalError;
+        return _composables_alert__WEBPACK_IMPORTED_MODULE_2__.useSwalError;
       }
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
@@ -30255,7 +30259,11 @@ var _hoisted_10 = {
 var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "for": ""
 }, "Nom", -1 /* HOISTED */);
-var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+var _hoisted_12 = {
+  key: 0,
+  "class": "invalid-feedback error"
+};
+var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
   form: "createForm",
   type: "submit",
   "class": "btn btn-success"
@@ -30274,17 +30282,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [_hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
     required: "",
-    "class": "form-control",
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["form-control", {
+      'is-invalid': $setup.nomError != ''
+    }]),
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
       return $setup.nomNouveauNS = $event;
     })
-  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.nomNouveauNS]])])], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_9)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  }, null, 2 /* CLASS */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.nomNouveauNS]]), $setup.nomError != '' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.nomError), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_9)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "modal-footer"
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn-danger",
     onClick: $setup.closeModal
-  }, "Fermer"), _hoisted_12])])])])], 64 /* STABLE_FRAGMENT */);
+  }, "Fermer"), _hoisted_13])])])])], 64 /* STABLE_FRAGMENT */);
 }
 
 /***/ }),
@@ -30446,43 +30456,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 /***/ }),
 
-/***/ "./resources/js/Composables/alert.js":
-/*!*******************************************!*\
-  !*** ./resources/js/Composables/alert.js ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "useSwalError": () => (/* binding */ useSwalError),
-/* harmony export */   "useSwalSuccess": () => (/* binding */ useSwalSuccess)
-/* harmony export */ });
-function useSwalSuccess(message) {
-  Swal.fire({
-    toast: true,
-    icon: 'success',
-    title: message,
-    animation: false,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 4000
-  });
-}
-function useSwalError(message) {
-  Swal.fire({
-    toast: true,
-    icon: 'error',
-    title: message,
-    animation: false,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 4000
-  });
-}
-
-/***/ }),
-
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -30569,6 +30542,43 @@ window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jqu
 window.Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 
 
+
+/***/ }),
+
+/***/ "./resources/js/composables/alert.js":
+/*!*******************************************!*\
+  !*** ./resources/js/composables/alert.js ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useSwalError": () => (/* binding */ useSwalError),
+/* harmony export */   "useSwalSuccess": () => (/* binding */ useSwalSuccess)
+/* harmony export */ });
+function useSwalSuccess(message) {
+  Swal.fire({
+    toast: true,
+    icon: 'success',
+    title: message,
+    animation: false,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 4000
+  });
+}
+function useSwalError(message) {
+  Swal.fire({
+    toast: true,
+    icon: 'error',
+    title: message,
+    animation: false,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 4000
+  });
+}
 
 /***/ }),
 
