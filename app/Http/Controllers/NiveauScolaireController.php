@@ -21,4 +21,8 @@ class NiveauScolaireController extends Controller
         
         return redirect()->back();
     }
+
+    public function edit(NiveauScolaire $niveauScolaire){
+        return response()->json(["niveauScolaire" => $niveauScolaire]);
+    }
 }

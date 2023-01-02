@@ -41,7 +41,7 @@
                                         <td>{{ niveauScolaire.nom }}</td>
                                         <td>
                                             <div class="d-flex justify-items-center">
-                                                <button class="btn btn-info mr-2"><i class="fas fa-pen"></i></button>
+                                                <button @click="openEditModal(niveauScolaire.id)" class="btn btn-info mr-2"><i class="fas fa-pen"></i></button>
                                                 <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                             </div>
                                         </td>
@@ -56,11 +56,19 @@
 
         </div>
     </div>
+
+    <EditNiveauScolaire
+        :niveau-scolaire-id = "editingElementId"
+        :show="showModal"
+        @modal-closed="modalClosed" 
+    />
 </template>
 
 <script setup>
-import PaginationVue from '../../Shared/Pagination.vue';
-import CreateNiveauScolaire from './CreateNiveauScolaire.vue';
+    import { ref } from 'vue';
+    import PaginationVue from '../../Shared/Pagination.vue';
+    import CreateNiveauScolaire from './CreateNiveauScolaire.vue';
+    import EditNiveauScolaire from './EditNiveauScolaire.vue';
 
     //récup des données transmises par le fichier controller
     const props = defineProps({
@@ -69,4 +77,18 @@ import CreateNiveauScolaire from './CreateNiveauScolaire.vue';
             required: true,
         } // et on accède à ce tableau via un v-for
     })
+
+    // pour passage props au fichier EditNiveauScolaire.vue
+    const editingElementId = ref(0)
+    const showModal = ref(false)
+
+    const openEditModal = (id) => {
+        editingElementId.value = id
+        showModal.value = true
+    }
+
+    const modalClosed = () => {
+        editingElementId.value = 0
+        showModal.value = false
+    }
 </script>
