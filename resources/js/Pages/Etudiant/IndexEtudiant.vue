@@ -17,7 +17,14 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title">
-                                <button class="btn btn-primary" ><i class="fa fa-plus"></i> Nouveau</button>
+                                    <button class="btn btn-primary mb-2"><i class="fa fa-plus"></i> Nouveau</button>
+                                    <select @change="search" v-model="per_page" class="form-control">
+                                        <option disabled>Par page</option>
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                    </select>
                             </div>
                             <div class="card-tools">
                                 <PaginationVue 
@@ -32,8 +39,23 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Etudiant</th>
-                                        <th>Niveau Scolaire</th>
+                                        <th>
+                                            <p>Etudiant</p>
+                                            <input @keyup="search" v-model="searchEtudiant" type="text" class="form-control">
+                                        </th>
+                                        <th>
+                                            <p>Niveau Scolaire</p>
+                                            <select @change="search" v-model="filtreNiveauScolaire" class="form-control">
+                                                <option value=""></option>
+                                                <option 
+                                                    :value="niveauscolaire.id" 
+                                                    v-for="niveauscolaire in props.niveauScolaires" 
+                                                    :key="niveauscolaire.id"
+                                                >
+                                                    {{ niveauscolaire.nom }}
+                                                </option>
+                                            </select>
+                                        </th>
                                         <th style="width: 100px"></th>
                                     </tr>
                                 </thead>
@@ -62,9 +84,31 @@
 
 <script setup> 
     import PaginationVue from "@/Shared/Pagination.vue"
+    import { ref } from "vue";
+    import { Inertia } from "@inertiajs/inertia";
     //import CreateEtudiant from "./CreateEtudiant.vue";
 
     const props = defineProps({
-        etudiants: Object
+        etudiants: Object,
+        niveauScolaires:  Array,
+        filters: Object
     })
+
+    const searchEtudiant = ref(props.filters.search ?? "")
+    const filtreNiveauScolaire = ref(props.filters.filter ?? "")
+    const per_page = ref(props.filters.per_page ?? 5)
+
+    // utilisation du lodash du fichier resources/js/bootstrap.js avec la ligne 2 window._ = _;
+    // _.throttle permet de retarder de x sec la fonction. Si rien n'est tapé dans les 1000ms, on lance la fonction, donc la requête.
+    const search = _.throttle(function(){
+        // console.log("searchEtudiant: ", searchEtudiant.value);
+        // console.log("filter: ", filtreNiveauScolaire.value);
+        // console.log("per_page: ", per_page.value);
+
+        Inertia.get(route("etudiant.index", {search: searchEtudiant.value, filter: filtreNiveauScolaire.value, per_page: per_page.value}), {}, {
+            replace: true,  // met à jour l'url en temps réel
+            preserveState: true, //permet de garder l'état des variables sans rechargement de la page
+
+        })
+    }, 1000)
 </script>
