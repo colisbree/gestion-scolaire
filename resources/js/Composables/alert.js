@@ -1,3 +1,5 @@
+import Swal from "sweetalert2"
+
 export function useSwalSuccess(message) {
     Swal.fire({
         toast: true,
@@ -19,5 +21,27 @@ export function useSwalError(message) {
         position: 'top-end',
         showConfirmButton: false,
         timer: 4000
+    })
+}
+
+export function useSwalConfirm(message, callback) {
+    Swal.fire({
+        html: message,
+        icon: "warning",
+        buttonStyling: true,
+        showCancelButton: true,
+        confirmButtonText: "Oui, continuer.",
+        cancelButtonText: "Non, fermer.",
+        customClass: {
+            confirmButton: "btn btn-primary",
+            cancelButton: "btn btn-danger"
+        },
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            callback()
+        } else if (result.isDenied) {
+            Swal.close();
+        }
     })
 }

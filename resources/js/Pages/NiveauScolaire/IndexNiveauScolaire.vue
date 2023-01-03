@@ -42,7 +42,7 @@
                                         <td>
                                             <div class="d-flex justify-items-center">
                                                 <button @click="openEditModal(niveauScolaire.id)" class="btn btn-info mr-2"><i class="fas fa-pen"></i></button>
-                                                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                                <button @click="deleteConfirmation(niveauScolaire.id)" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -66,9 +66,11 @@
 
 <script setup>
     import { ref } from 'vue';
-    import PaginationVue from '../../Shared/Pagination.vue';
+    import PaginationVue from '@/Shared/Pagination.vue';
     import CreateNiveauScolaire from './CreateNiveauScolaire.vue';
     import EditNiveauScolaire from './EditNiveauScolaire.vue';
+    import { useSwalConfirm, useSwalError, useSwalSuccess } from '@/Composables/alert';
+    import { Inertia } from '@inertiajs/inertia';
 
     //récup des données transmises par le fichier controller
     const props = defineProps({
@@ -90,5 +92,23 @@
     const modalClosed = () => {
         editingElementId.value = 0
         showModal.value = false
+    }
+
+    const deleteNiveauScolaire = (id) => {
+        Inertia.delete(route("niveauscolaire.delete", {niveauScolaire: id}), {
+            onSuccess: (reponse)=>{
+                useSwalSuccess("Niveau scolaire supprimé avec succès !")
+            },
+            onError: (error)=>{
+                useSwalError(error.message ?? "Une erreur a été rencontrée") // si error.message est null alors on affiche 'une erreur a été rencontrée'
+            },
+        })
+    }
+
+    const deleteConfirmation = (id) => {
+        const message = "Vous êtes sur le point de supprimer cet élément, voulez-vous continuer ?"
+        useSwalConfirm(message, ()=>{
+            deleteNiveauScolaire(id)
+        })
     }
 </script>
