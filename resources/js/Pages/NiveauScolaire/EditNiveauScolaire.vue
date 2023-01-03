@@ -12,7 +12,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="editForm" action="">
+                    <form id="editForm" @submit.prevent="soumettre">
                         <div class="form-group">
                             <label for="">Nom</label>
                             <input 
@@ -37,8 +37,10 @@
 
 <script setup>
     import { reactive, watch } from "vue";
+    import { useSwalSuccess, useSwalError} from "@/Composables/alert";
+    import { Inertia } from "@inertiajs/inertia";
 
-    // emit <= Communication de l'enfant vers le parent
+    // defineEmits <= Communication de l'enfant vers le parent
     const emit = defineEmits(["modalClosed"])
 
     const props = defineProps({
@@ -59,9 +61,10 @@
     })
 
     const getNiveauScolaireById = () => {
-        axios.get(route("niveauScolaire.edit", {niveauScolaire: props.niveauScolaireId}))
+        axios.get(route("niveauscolaire.edit", {niveauScolaire: props.niveauScolaireId}))
             .then((response)=>{
-                console.log("reponse : ", response.data);
+                editNiveauScolaire.id = response.data.niveauScolaire.id
+                editNiveauScolaire.nom = response.data.niveauScolaire.nom
             })
             .catch((error)=>{
                 console.log(error);
@@ -81,12 +84,30 @@
     )
 
     const openModal = ()=>{
+        getNiveauScolaireById()
         $("#editModal").modal("show")
     }
 
     const closeModal = ()=>{
         $("#editModal").modal("hide")
-        emit("modalClosed") // <= Envoi au fichier parent la fermeture du modal qui sera intercepté par la ligne @modal-closed="modalClosed" 
+        emit("modalClosed") // <= informe le parent de la fermeture du modal qui sera intercepté par la ligne @modal-closed="modalClosed" dans le fichier parent
+    }
+
+    const soumettre = () => {
+        Inertia.put(
+            route("niveauscolaire.update", {niveauScolaire: props.niveauScolaireId}), 
+            {nom: editNiveauScolaire.nom},
+            {
+                onSuccess: (reponse)=>{
+                    useSwalSuccess("Niveau scolaire mis à jour avec succès !")
+                    closeModal()
+                },
+                onError: (error)=>{
+                    useSwalError("Une erreur a été rencontrée")
+                    editNiveauScolaire.nomError = error.nom
+                },
+            }
+        )
     }
 
 </script>
