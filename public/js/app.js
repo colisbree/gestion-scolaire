@@ -29752,6 +29752,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
+/* harmony import */ var _Composables_alert__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Composables/alert */ "./resources/js/Composables/alert.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   __name: 'CreateEtudiant',
@@ -29762,6 +29766,9 @@ __webpack_require__.r(__webpack_exports__);
     var expose = _ref.expose;
     expose();
     var props = __props;
+
+    // inpuKey permet de cacher l'image quand on réinitialise le formulaire
+    var inputKey = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(0);
     var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.useForm)({
       nom: "",
       prenom: "",
@@ -29771,7 +29778,17 @@ __webpack_require__.r(__webpack_exports__);
       photo: null
     });
     var soumettre = function soumettre() {
-      console.log(form);
+      form.post(route("etudiant.store"), {
+        onSuccess: function onSuccess(page) {
+          (0,_Composables_alert__WEBPACK_IMPORTED_MODULE_1__.useSwalSuccess)("Etudiant ajouté avec succès !");
+          form.reset();
+          inputKey.value += 1;
+          document.getElementById('image-preview').style.display = "none";
+        },
+        onError: function onError(errors) {
+          (0,_Composables_alert__WEBPACK_IMPORTED_MODULE_1__.useSwalError)("Une erreur s'est produite.");
+        }
+      });
     };
     var previewImage = function previewImage(event) {
       if (event.target.files.length > 0) {
@@ -29784,12 +29801,20 @@ __webpack_require__.r(__webpack_exports__);
     };
     var __returned__ = {
       props: props,
+      inputKey: inputKey,
       form: form,
       soumettre: soumettre,
       previewImage: previewImage,
       get useForm() {
         return _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.useForm;
-      }
+      },
+      get useSwalSuccess() {
+        return _Composables_alert__WEBPACK_IMPORTED_MODULE_1__.useSwalSuccess;
+      },
+      get useSwalError() {
+        return _Composables_alert__WEBPACK_IMPORTED_MODULE_1__.useSwalError;
+      },
+      ref: vue__WEBPACK_IMPORTED_MODULE_2__.ref
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
       enumerable: false,
@@ -30634,14 +30659,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       value: nv.id,
       key: nv.id
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(nv.nom), 9 /* TEXT, PROPS */, _hoisted_29);
-  }), 128 /* KEYED_FRAGMENT */))], 2 /* CLASS */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $setup.form.niveauScolaire]]), $setup.form.errors.niveauScolaire ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.niveauScolaire), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [_hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }), 128 /* KEYED_FRAGMENT */))], 2 /* CLASS */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $setup.form.niveauScolaire]]), $setup.form.errors.niveauScolaire ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.niveauScolaire), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [_hoisted_33, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("input", {
+    key: $setup.inputKey,
     type: "file",
     accept: "image/*",
     "class": "form-control",
     onInput: _cache[5] || (_cache[5] = function ($event) {
       return $setup.previewImage($event);
     })
-  }, null, 32 /* HYDRATE_EVENTS */)]), _hoisted_34])], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_9)]), _hoisted_35])])])])])], 64 /* STABLE_FRAGMENT */);
+  }, null, 32 /* HYDRATE_EVENTS */))]), _hoisted_34])], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_9)]), _hoisted_35])])])])])], 64 /* STABLE_FRAGMENT */);
 }
 
 /***/ }),

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Etudiant;
 use App\Models\NiveauScolaire;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EtudiantController extends Controller
 {
@@ -41,6 +43,37 @@ class EtudiantController extends Controller
         return inertia("Etudiant/CreateEtudiant", [
             "niveauScolaires"=> $niveauScolaires,
         ]);
+    }
+
+    public function store(Request $request){
+        $validatedData = $request->validate([
+            "nom"=> "required",
+            "prenom"=> "required",
+            "age"=> "required",
+            "sexe"=> "required",
+            "niveauScolaire"=> "required|exists:niveau_scolaires,id",
+        ]);
+
+        try{
+            DB::beginTransaction(); // permet d'exécuter les requêtes sans envoi à la BDD
+            $etudiant = Etudiant::create([...$validatedData, "niveau_scolaire_id" => $request->niveauScolaire]);
+
+            if ($request->hasFile("photo")){
+                $photo = $request->photo;
+                $fileName = $photo->getClientOriginalName();
+                $filePath = $photo->storeAs("photos", $fileName, "public"); 
+                // ici public fait appel au fichier 'app/config/filesystems.php' puis au disk > public
+                // le fichier est donc enregistré dans le dossier 'app/public/photos'
+                $etudiant->photo = $filePath;
+                $etudiant->save();
+            }
+            DB::commit(); // Envoi le résultat des requêtes à la BDD s'il n'y a pas eu d'erreur
+        }
+        catch(Exception $e){
+            DB::rollBack(); // fonction exécutée en cas d'erreur (annulation des requêtes précédentes)
+        }
+
+        return redirect()->back();
     }
 
     public function edit() {
