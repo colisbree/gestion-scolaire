@@ -60,7 +60,8 @@ class EtudiantController extends Controller
 
             if ($request->hasFile("photo")){
                 $photo = $request->photo;
-                $fileName = $photo->getClientOriginalName();
+                $name = $etudiant->nom." ".$etudiant->prenom;
+                $fileName = str_replace(" ", "-", $name);
                 $filePath = $photo->storeAs("photos", $fileName, "public"); 
                 // ici public fait appel au fichier 'app/config/filesystems.php' puis au disk > public
                 // le fichier est donc enregistré dans le dossier 'app/public/photos'
