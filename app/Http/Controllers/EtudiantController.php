@@ -7,6 +7,7 @@ use App\Models\NiveauScolaire;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class EtudiantController extends Controller
 {
@@ -77,7 +78,51 @@ class EtudiantController extends Controller
         return redirect()->back();
     }
 
-    public function edit() {
-        return inertia("Etudiant/EditEtudiant");
+    public function edit(Etudiant $etudiant) {
+        $niveauScolaires = NiveauScolaire::all();
+       
+        return inertia("Etudiant/EditEtudiant", [
+            "niveauScolaires"=> $niveauScolaires,
+            "etudiant"=> $etudiant,
+        ]);
+    }
+
+    public function update(Request $request, Etudiant $etudiant) {
+        
+        $validatedData = $request->validate([
+            "nom"=> "required",
+            "prenom"=> "required",
+            "age"=> "required",
+            "sexe"=> "required",
+            "niveauScolaire"=> "required|exists:niveau_scolaires,id",
+        ]);
+
+        try{
+            DB::beginTransaction(); // permet d'exécuter les requêtes sans envoi à la BDD
+            $etudiant->update([...$validatedData, "niveau_scolaire_id" => $request->niveauScolaire]);
+
+            if ($request->hasFile("photo")){
+                // suppression de l'ancienne photo
+                if(Storage::exists($etudiant->photo)){
+                    Storage::delete($etudiant->photo);
+                }
+
+                // nouvelle photo
+                $photo = $request->photo;
+                $name = $etudiant->nom." ".$etudiant->prenom;
+                $fileName = str_replace(" ", "-", $name);
+                $filePath = $photo->storeAs("photos", $fileName, "public"); 
+                // ici public fait appel au fichier 'app/config/filesystems.php' puis au disk > public
+                // le fichier est donc enregistré dans le dossier 'app/public/photos'
+                $etudiant->photo = $filePath;
+                $etudiant->save();
+            }
+            DB::commit(); // Envoi le résultat des requêtes à la BDD s'il n'y a pas eu d'erreur
+        }
+        catch(Exception $e){
+            DB::rollBack(); // fonction exécutée en cas d'erreur (annulation des requêtes précédentes)
+        }
+
+        return redirect()->back();        
     }
 }

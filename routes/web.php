@@ -24,7 +24,8 @@ Route::get('/', function () {
 Route::get('/etudiant', [EtudiantController::class, 'index'] )->name('etudiant.index');
 Route::post('/etudiant', [EtudiantController::class, 'store'] )->name('etudiant.store');
 Route::get('/etudiant/create', [EtudiantController::class, 'create'] )->name('etudiant.create');
-Route::get('/etudiant/edit/{id}', [EtudiantController::class, 'edit'] )->name('etudiant.edit');
+Route::get('/etudiant/edit/{etudiant}', [EtudiantController::class, 'edit'] )->name('etudiant.edit');   // accéder à la modification
+Route::post('/etudiant/{etudiant}', [EtudiantController::class, 'update'] )->name('etudiant.update');    // effectuer la modification
 
 Route::get('/niveauscolaire', [NiveauScolaireController::class, 'index'] )->name('niveauscolaire.index');
 Route::get('/niveauscolaire/edit/{niveauScolaire}', [NiveauScolaireController::class, 'edit'] )->name('niveauscolaire.edit');
