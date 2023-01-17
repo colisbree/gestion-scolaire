@@ -125,4 +125,16 @@ class EtudiantController extends Controller
 
         return redirect()->back();        
     }
+
+    public function delete(Etudiant $etudiant){
+
+        if($etudiant->photo){
+            if(Storage::exists($etudiant->photo)){
+                Storage::delete($etudiant->photo);
+            }
+        }
+
+        $etudiant->delete();
+        return redirect()->back();  
+    }
 }

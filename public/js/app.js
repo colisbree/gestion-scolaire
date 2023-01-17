@@ -29929,10 +29929,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Shared_Pagination_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/Shared/Pagination.vue */ "./resources/js/Shared/Pagination.vue");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
+/* harmony import */ var _Composables_alert__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Composables/alert */ "./resources/js/Composables/alert.js");
 
 
 
-//import CreateEtudiant from "./CreateEtudiant.vue";
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   __name: 'IndexEtudiant',
@@ -29973,6 +29973,26 @@ __webpack_require__.r(__webpack_exports__);
       }
       return etudiant.sexe == "M" ? "images/man.jpg" : "images/woman.jpg";
     };
+    var deleteEtudiant = function deleteEtudiant(id) {
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia["delete"](route("etudiant.delete", {
+        etudiant: id
+      }), {
+        onSuccess: function onSuccess(reponse) {
+          (0,_Composables_alert__WEBPACK_IMPORTED_MODULE_3__.useSwalSuccess)("Etudiant supprimé avec succès !");
+        },
+        onError: function onError(error) {
+          var _error$message;
+          (0,_Composables_alert__WEBPACK_IMPORTED_MODULE_3__.useSwalError)((_error$message = error.message) !== null && _error$message !== void 0 ? _error$message : "Une erreur a été rencontrée"); // si error.message est null alors on affiche 'une erreur a été rencontrée'
+        }
+      });
+    };
+
+    var deleteConfirmation = function deleteConfirmation(etudiant) {
+      var message = "Vous \xEAtes sur le point de supprimer l'\xE9tudiant \"".concat(etudiant.nom, " ").concat(etudiant.prenom, "\", voulez-vous continuer ?");
+      (0,_Composables_alert__WEBPACK_IMPORTED_MODULE_3__.useSwalConfirm)(message, function () {
+        deleteEtudiant(etudiant.id);
+      });
+    };
     var __returned__ = {
       props: props,
       searchEtudiant: searchEtudiant,
@@ -29980,10 +30000,21 @@ __webpack_require__.r(__webpack_exports__);
       per_page: per_page,
       search: search,
       showPic: showPic,
+      deleteEtudiant: deleteEtudiant,
+      deleteConfirmation: deleteConfirmation,
       PaginationVue: _Shared_Pagination_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
       ref: vue__WEBPACK_IMPORTED_MODULE_1__.ref,
       get Inertia() {
         return _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia;
+      },
+      get useSwalSuccess() {
+        return _Composables_alert__WEBPACK_IMPORTED_MODULE_3__.useSwalSuccess;
+      },
+      get useSwalConfirm() {
+        return _Composables_alert__WEBPACK_IMPORTED_MODULE_3__.useSwalConfirm;
+      },
+      get useSwalError() {
+        return _Composables_alert__WEBPACK_IMPORTED_MODULE_3__.useSwalError;
       }
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
@@ -31058,12 +31089,11 @@ var _hoisted_26 = {
 var _hoisted_27 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "fas fa-pen"
 }, null, -1 /* HOISTED */);
-var _hoisted_28 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  "class": "btn btn-danger"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+var _hoisted_28 = ["onClick"];
+var _hoisted_29 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "fas fa-trash"
-})], -1 /* HOISTED */);
-
+}, null, -1 /* HOISTED */);
+var _hoisted_30 = [_hoisted_29];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Link");
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
@@ -31129,7 +31159,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         return [_hoisted_27];
       }),
       _: 2 /* DYNAMIC */
-    }, 1032 /* PROPS, DYNAMIC_SLOTS */, ["href"]), _hoisted_28])])]);
+    }, 1032 /* PROPS, DYNAMIC_SLOTS */, ["href"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      onClick: function onClick($event) {
+        return $setup.deleteConfirmation(etudiant);
+      },
+      "class": "btn btn-danger"
+    }, _hoisted_30, 8 /* PROPS */, _hoisted_28)])])]);
   }), 128 /* KEYED_FRAGMENT */))])])])])])])])])], 64 /* STABLE_FRAGMENT */);
 }
 

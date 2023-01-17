@@ -76,7 +76,7 @@
                                                 <Link :href="route('etudiant.edit', {etudiant: etudiant.id})"  class="btn btn-info mr-2">
                                                     <i class="fas fa-pen"></i>
                                                 </Link>
-                                                <button  class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                                <button @click="deleteConfirmation(etudiant)" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -96,7 +96,8 @@
     import PaginationVue from "@/Shared/Pagination.vue"
     import { ref } from "vue";
     import { Inertia } from "@inertiajs/inertia";
-    //import CreateEtudiant from "./CreateEtudiant.vue";
+    import { useSwalSuccess, useSwalConfirm, useSwalError } from "@/Composables/alert"
+
 
     const props = defineProps({
         etudiants: Object,
@@ -127,5 +128,23 @@
             return 'storage/'+etudiant.photo
         }
         return etudiant.sexe == "M" ? "images/man.jpg" : "images/woman.jpg"
+    }
+
+    const deleteEtudiant = (id) => {
+        Inertia.delete(route("etudiant.delete", {etudiant: id}), {
+            onSuccess: (reponse)=>{
+                useSwalSuccess("Etudiant supprimé avec succès !")
+            },
+            onError: (error)=>{
+                useSwalError(error.message ?? "Une erreur a été rencontrée") // si error.message est null alors on affiche 'une erreur a été rencontrée'
+            },
+        })
+    }
+
+    const deleteConfirmation = (etudiant) => {
+        const message = `Vous êtes sur le point de supprimer l'étudiant "${etudiant.nom} ${etudiant.prenom}", voulez-vous continuer ?`
+        useSwalConfirm(message, ()=>{
+            deleteEtudiant(etudiant.id)
+        })
     }
 </script>
