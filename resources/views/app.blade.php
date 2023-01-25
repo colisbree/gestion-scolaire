@@ -12,7 +12,7 @@
     @inertia
 
     <p>
-      page 'app.blade.php'
+      <!-- page 'app.blade.php' -->
     </p>
   </body>
 </html>
